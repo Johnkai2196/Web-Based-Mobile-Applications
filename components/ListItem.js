@@ -11,7 +11,14 @@ const ListItem = (props) => {
       />
       <View style={styles.textView}>
         <Text style={styles.title}>{props.singleMedia.title}</Text>
-        <Text style={{color: 'grey'}}>{props.singleMedia.description}</Text>
+        <Text
+          style={{
+            color: 'grey',
+            height: '50%',
+          }}
+        >
+          {props.singleMedia.description}
+        </Text>
       </View>
     </TouchableOpacity>
   );
@@ -23,7 +30,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     padding: 10,
-    margin: 1,
+    margin: 10,
     flexWrap: 'wrap',
   },
   img: {
@@ -32,6 +39,7 @@ const styles = StyleSheet.create({
     width: '50%',
     padding: 10,
     borderRadius: 6,
+    borderBottomLeftRadius: 65,
   },
   title: {
     color: 'white',
@@ -40,6 +48,7 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
   textView: {
+    height: 100,
     flex: 2,
     padding: 15,
   },

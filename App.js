@@ -8,7 +8,13 @@ import Header from './components/Header';
 const App = () => {
   return (
     <SafeAreaView
-      style={(GlobalStyles.AndroidSafeArea, {backgroundColor: '#242424'})}
+      style={
+        (GlobalStyles.AndroidSafeArea,
+        {
+          backgroundColor: '#242424',
+          height: '100%',
+        })
+      }
     >
       <Header />
       <List />

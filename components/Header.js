@@ -1,14 +1,13 @@
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, StyleSheet, View, Text} from 'react-native';
 import {Settings} from 'react-native-feather';
+import cats from '../img/104253550-helping-stray-abandoned-kittens-632x475.jpg';
 
 const Header = () => {
   return (
     <View style={test.container}>
-      <Image
-        source={{uri: 'http://placekitten.com/2039/1920'}}
-        style={test.img}
-      />
+      <Image source={cats} style={test.img} />
       <Settings stroke={'white'} style={test.setting} />
+      <Text style={test.cat}>Homeless Kittens</Text>
     </View>
   );
 };
@@ -20,6 +19,7 @@ const test = StyleSheet.create({
   },
   img: {
     height: '100%',
+    width: '100%',
     borderBottomRightRadius: 65,
   },
   setting: {
@@ -27,6 +27,14 @@ const test = StyleSheet.create({
     position: 'absolute',
     right: 20,
     top: 20,
+  },
+  cat: {
+    position: 'absolute',
+    bottom: 20,
+    color: 'white',
+    backgroundColor: 'darkblue',
+    padding: 10,
+    fontSize: 15,
   },
 });
 export default Header;

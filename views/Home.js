@@ -2,7 +2,7 @@ import React from 'react';
 import {SafeAreaView} from 'react-native';
 import GlobalStyles from '../utils/GlobalStyles';
 import List from '../components/List';
-import {PropsType} from 'react-native/ReactCommon/hermes/inspector/tools/msggen/src/Type';
+import PropTypes from 'prop-types';
 
 const Home = ({navigation}) => {
   return (
@@ -12,6 +12,6 @@ const Home = ({navigation}) => {
   );
 };
 Home.propsTypes = {
-  navigation: PropsType.object,
+  navigation: PropTypes.object,
 };
 export default Home;

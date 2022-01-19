@@ -2,7 +2,7 @@ import React from 'react';
 import {FlatList} from 'react-native';
 import ListItem from './ListItem';
 import {useMedia} from '../hooks/ApiHooks';
-import {PropsType} from 'react-native/ReactCommon/hermes/inspector/tools/msggen/src/Type';
+import PropTypes from 'prop-types';
 
 const List = ({navigation}) => {
   const {mediaArray} = useMedia();
@@ -18,6 +18,6 @@ const List = ({navigation}) => {
 };
 
 List.propTypes = {
-  navigation: PropsType.object,
+  navigation: PropTypes.object,
 };
 export default List;

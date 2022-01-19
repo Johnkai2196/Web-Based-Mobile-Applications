@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  StyleSheet,
-  ActivityIndicator,
-  SafeAreaView,
-  Text,
-  Image,
-} from 'react-native';
+import {StyleSheet, SafeAreaView, Text, Image} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
 
@@ -19,7 +13,6 @@ const Single = ({route}) => {
         style={{width: '90%', height: '70%'}}
         resizeMode="contain"
       />
-      <ActivityIndicator></ActivityIndicator>
       <Text>{file.title}</Text>
       <Text>{file.description}</Text>
     </SafeAreaView>
@@ -36,7 +29,7 @@ const styles = StyleSheet.create({
   },
 });
 
-Single.PropTypes = {
+Single.propTypes = {
   route: PropTypes.object,
 };
 

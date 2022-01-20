@@ -1,35 +1,58 @@
 import React, {useContext, useEffect} from 'react';
-import {StyleSheet, View, Text, Button} from 'react-native';
+import {
+  StyleSheet,
+  KeyboardAvoidingView,
+  Text,
+  Platform,
+  TouchableOpacity,
+  Keyboard,
+} from 'react-native';
 import PropTypes from 'prop-types';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useUser} from '../hooks/ApiHooks';
+import LoginForm from '../components/LoginForm';
+import Registerform from '../components/RegisterForm';
 
 const Login = ({navigation}) => {
-  const {setIsLoggedIn} = useContext(MainContext);
+  const {setIsLoggedIn, setUser} = useContext(MainContext);
+  const {getUserByToken} = useUser();
 
   const checkToken = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
-    // dummy validation for user token
-    console.log('token', userToken);
-    if (userToken === 'abc') {
+    if (!userToken) {
+      return;
+    }
+    console.log('token value in async storage', userToken);
+    try {
+      const userData = await getUserByToken(userToken);
+      console.log('checkToken', userData);
+      setUser(userData);
       setIsLoggedIn(true);
+    } catch (error) {
+      console.error(error);
     }
   };
   useEffect(() => {
     checkToken();
   }, []);
-  const logIn = async () => {
-    console.log('Login button pressed');
-    // in real world: call api with user creds and get token as response
-    // now we are using a "dummy" token
-    await AsyncStorage.setItem('userToken', 'abc');
-    setIsLoggedIn(true);
-  };
+
   return (
-    <View style={styles.container}>
-      <Text>Login</Text>
-      <Button title="Sign in!" onPress={logIn} />
-    </View>
+    <TouchableOpacity
+      onPress={() => Keyboard.dismiss()}
+      style={{flex: 1}}
+      activeOpacity={1}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : ''}
+        style={styles.container}
+      >
+        <Text>Login</Text>
+        <LoginForm />
+        <Text>Register</Text>
+        <Registerform />
+      </KeyboardAvoidingView>
+    </TouchableOpacity>
   );
 };
 

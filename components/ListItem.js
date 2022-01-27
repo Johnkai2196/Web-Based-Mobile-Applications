@@ -1,54 +1,33 @@
 import React from 'react';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import PropTypes from 'prop-types';
 import {uploadsUrl} from '../utils/variables';
+import {Avatar, ListItem as RNEListItem} from 'react-native-elements';
 
 const ListItem = ({navigation, singleMedia}) => {
   return (
-    <TouchableOpacity
-      style={styles.container}
+    <RNEListItem
+      bottomDivider
       onPress={() => {
         navigation.navigate('Single', {file: singleMedia});
       }}
     >
-      <Image
+      <Avatar
+        size="large"
+        square
         source={{uri: uploadsUrl + singleMedia.thumbnails.w160}}
-        style={styles.img}
-      />
-      <View style={styles.textView}>
-        <Text style={styles.title}>{singleMedia.title}</Text>
-        <Text>{singleMedia.description}</Text>
-      </View>
-    </TouchableOpacity>
+      ></Avatar>
+      <RNEListItem.Content>
+        <RNEListItem.Title numberOfLines={1} h4>
+          {singleMedia.title}
+        </RNEListItem.Title>
+        <RNEListItem.Subtitle numberOfLines={1}>
+          {singleMedia.description}
+        </RNEListItem.Subtitle>
+      </RNEListItem.Content>
+      <RNEListItem.Chevron />
+    </RNEListItem>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'lightgrey',
-    flex: 1,
-    flexDirection: 'row',
-    padding: 10,
-    margin: 1,
-    flexWrap: 'wrap',
-  },
-  img: {
-    flex: 1,
-    height: '100%',
-    width: '50%',
-    padding: 10,
-    borderRadius: 6,
-  },
-  title: {
-    fontWeight: 'bold',
-    fontSize: 20,
-    paddingBottom: 10,
-  },
-  textView: {
-    flex: 2,
-    padding: 15,
-  },
-});
 
 ListItem.propTypes = {
   singleMedia: PropTypes.object.isRequired,

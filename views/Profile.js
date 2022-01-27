@@ -1,5 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {StyleSheet, Image, SafeAreaView, Text, Button} from 'react-native';
+import {StyleSheet, ActivityIndicator} from 'react-native';
+import {Card, Text, Button, ListItem, Avatar} from 'react-native-elements';
 import {MainContext} from '../contexts/MainContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useTag} from '../hooks/ApiHooks';
@@ -8,7 +9,7 @@ import {uploadsUrl} from '../utils/variables';
 const Profile = () => {
   const {setIsLoggedIn, user} = useContext(MainContext);
   const [avatar, setAvatar] = useState('http://placekitten.com/640');
-  const {getFilesByTag, postTag} = useTag();
+  const {postTag, getFilesByTag} = useTag();
   console.log('Profile', user);
 
   const fetchAvatar = async () => {
@@ -20,35 +21,49 @@ const Profile = () => {
       console.error(error.message);
     }
   };
-  // temp testing postTag
+
+  // quick'n'dirty testing postTag with hardcoded token
+  // this is not needed yet and should be called only when you want to set
+  // a new avatar in the remote API
   const createAvatar = async (mediaId) => {
     const data = {
       file_id: mediaId,
       tag: 'avatar_' + user.user_id,
     };
     try {
-      const result = await postTag(data, 'correct token here');
+      const result = await postTag(
+        data,
+        'correct token should be here to use this'
+      );
       console.log(result);
-    } catch (e) {
-      console.error(e.message);
+    } catch (error) {
+      console.error(error.message);
     }
   };
+
   useEffect(() => {
     fetchAvatar();
-    // createAvatar(95); test
+    // createAvatar(95); this was just for testing
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text>Profile</Text>
-      <Image
+    <Card>
+      <Card.Title>
+        <Text h1>{user.username}</Text>
+      </Card.Title>
+      <Card.Image
         source={{uri: avatar}}
-        style={{width: '80%', height: '50%'}}
-        resizeMode="contain"
+        style={styles.image}
+        PlaceholderContent={<ActivityIndicator />}
       />
-      <Text>{user.username}</Text>
-      <Text>{user.email}</Text>
-      <Text>{user.full_name}</Text>
+      <ListItem>
+        <Avatar icon={{name: 'email', color: 'black'}} />
+        <Text>{user.email}</Text>
+      </ListItem>
+      <ListItem>
+        <Avatar icon={{name: 'user', type: 'font-awesome', color: 'black'}} />
+        <Text>{user.full_name}</Text>
+      </ListItem>
       <Button
         title="Log out!"
         onPress={async () => {
@@ -56,18 +71,12 @@ const Profile = () => {
           setIsLoggedIn(false);
         }}
       />
-    </SafeAreaView>
+    </Card>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingTop: 40,
-  },
+  image: {width: '100%', height: undefined, aspectRatio: 1},
 });
 
 export default Profile;

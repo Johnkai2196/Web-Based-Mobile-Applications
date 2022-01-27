@@ -1,5 +1,5 @@
-import {baseUrl} from '../utils/variables';
 import {useEffect, useState} from 'react';
+import {baseUrl} from '../utils/variables';
 
 const doFetch = async (url, options = {}) => {
   try {
@@ -13,14 +13,13 @@ const doFetch = async (url, options = {}) => {
         : json.message;
       throw new Error(message || response.statusText);
     }
-  } catch (e) {
-    throw new Error(e.message);
+  } catch (error) {
+    throw new Error(error.message);
   }
 };
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
-
   const loadMedia = async (start = 0, limit = 10) => {
     try {
       const response = await fetch(
@@ -32,27 +31,29 @@ const useMedia = () => {
       const json = await response.json();
       const media = await Promise.all(
         json.map(async (item) => {
-          const response = await fetch(`${baseUrl}media/${item.file_id}`);
+          const response = await fetch(baseUrl + 'media/' + item.file_id);
           const mediaData = await response.json();
           // console.log(mediaData);
           return mediaData;
         })
       );
       setMediaArray(media);
-    } catch (e) {
-      console.error(e);
+      // console.log(mediaArray);
+    } catch (error) {
+      console.error(error);
     }
   };
-
   // Call loadMedia() only once when the component is loaded
   useEffect(() => {
-    loadMedia();
+    loadMedia(0, 5);
   }, []);
+
   return {mediaArray};
 };
 
 const useLogin = () => {
   const postLogin = async (userCredentials) => {
+    // user credentials format: {username: 'someUsername', password: 'somePassword'}
     const options = {
       method: 'POST',
       headers: {
@@ -62,6 +63,7 @@ const useLogin = () => {
     };
     return await doFetch(baseUrl + 'login', options);
   };
+
   return {postLogin};
 };
 
@@ -84,17 +86,24 @@ const useUser = () => {
     };
     return await doFetch(baseUrl + 'users', options);
   };
-  return {getUserByToken, postUser};
+
+  const checkUsername = async (username) => {
+    const result = await doFetch(baseUrl + 'users/username/' + username);
+    return result.available;
+  };
+
+  return {getUserByToken, postUser, checkUsername};
 };
+
 const useTag = () => {
-  const postTag = async (tagdata, token) => {
+  const postTag = async (tagData, token) => {
     const options = {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'x-access-token': token,
       },
-      body: JSON.stringify(tagdata),
+      body: JSON.stringify(tagData),
     };
     return await doFetch(baseUrl + 'tags/', options);
   };
@@ -102,6 +111,7 @@ const useTag = () => {
   const getFilesByTag = async (tag) => {
     return await doFetch(baseUrl + 'tags/' + tag);
   };
+
   return {postTag, getFilesByTag};
 };
 

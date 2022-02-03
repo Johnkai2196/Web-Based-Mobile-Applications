@@ -1,5 +1,6 @@
-import {useEffect, useState} from 'react';
-import {baseUrl} from '../utils/variables';
+import {useContext, useEffect, useState} from 'react';
+import {appId, baseUrl} from '../utils/variables';
+import {MainContext} from '../contexts/MainContext';
 
 const doFetch = async (url, options = {}) => {
   try {
@@ -20,15 +21,22 @@ const doFetch = async (url, options = {}) => {
 
 const useMedia = () => {
   const [mediaArray, setMediaArray] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const {update} = useContext(MainContext);
   const loadMedia = async (start = 0, limit = 10) => {
+    setLoading(true);
     try {
-      const response = await fetch(
-        `${baseUrl}media?start=${start}&limit=${limit}`
-      );
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      const json = await response.json();
+      /*      const response = await fetch(
+              // ${baseUrl}media?start=${start}&limit=${limit}
+              `${baseUrl}tags/${appId}`
+            );
+            if (!response.ok) {
+              throw Error(response.statusText);
+
+            }
+            const json = await response.json();*/
+      const json = await useTag().getFilesByTag(appId);
+
       const media = await Promise.all(
         json.map(async (item) => {
           const response = await fetch(baseUrl + 'media/' + item.file_id);
@@ -39,16 +47,39 @@ const useMedia = () => {
       );
       setMediaArray(media);
       // console.log(mediaArray);
+
+      // media && setLoading(false);
     } catch (error) {
       console.error(error);
+      setLoading(false);
+    } finally {
+      setLoading(false);
     }
   };
   // Call loadMedia() only once when the component is loaded
+  // Or when the update state (MainContext) is changed
   useEffect(() => {
     loadMedia(0, 5);
-  }, []);
+  }, [update]);
 
-  return {mediaArray};
+  const postMedia = async (formData, token) => {
+    setLoading(true);
+    const options = {
+      method: 'POST',
+      headers: {
+        'x-access-token': token,
+        'Content-Type': 'multipart/form-data',
+      },
+      body: formData,
+    };
+
+    const result = await doFetch(baseUrl + 'media', options);
+    if (result) {
+      setLoading(false);
+    }
+    return result;
+  };
+  return {mediaArray, postMedia, loading};
 };
 
 const useLogin = () => {

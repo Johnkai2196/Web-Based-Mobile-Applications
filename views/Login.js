@@ -14,6 +14,7 @@ import {useUser} from '../hooks/ApiHooks';
 import LoginForm from '../components/LoginForm';
 import RegisterForm from '../components/RegisterForm';
 import {ButtonGroup, Card, Text} from 'react-native-elements';
+import Logo from '../assets/logo.svg';
 
 const Login = ({navigation}) => {
   const [formToggle, setFormToggle] = useState(true);
@@ -52,7 +53,7 @@ const Login = ({navigation}) => {
         style={styles.container}
       >
         <View style={styles.appTitle}>
-          <Text>MyApp</Text>
+          <Logo style={styles.logo} />
         </View>
         <View style={styles.form}>
           <Card>
@@ -93,6 +94,9 @@ const styles = StyleSheet.create({
   },
   form: {
     flex: 8,
+  },
+  logo: {
+    marginTop: 20,
   },
 });
 

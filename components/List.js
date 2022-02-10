@@ -5,7 +5,9 @@ import {useMedia} from '../hooks/ApiHooks';
 import PropTypes from 'prop-types';
 
 const List = ({navigation}) => {
-  const {mediaArray} = useMedia();
+  const {mediaArray, loading} = useMedia();
+  console.log('List load', loading);
+  console.log(mediaArray);
   return (
     <FlatList
       data={mediaArray}

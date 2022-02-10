@@ -74,6 +74,15 @@ const Profile = ({navigation}) => {
           }}
         />
         <Button
+          buttonStyle={{
+            backgroundColor: 'rgba(111, 202, 186, 1)',
+          }}
+          title="My Files"
+          onPress={() => {
+            navigation.navigate('My Files');
+          }}
+        />
+        <Button
           title="Log out!"
           onPress={async () => {
             await AsyncStorage.clear();

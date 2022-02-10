@@ -63,7 +63,6 @@ const Single = ({route}) => {
       const response = await postFavourite(file.file_id, token);
       response && setUserLike(true);
     } catch (e) {
-      // TODO: how should user be notified?
       console.error('createFavourite', e);
     }
   };
@@ -74,15 +73,16 @@ const Single = ({route}) => {
       const response = await deleteFavourite(file.file_id, token);
       response && setUserLike(false);
     } catch (e) {
-      // TODO: how should user be notified?
       console.error('removeFavourites', e);
     }
   };
   useEffect(() => {
     fetchOwner();
     fetchAvatar();
+  }, [userLike]);
+  useEffect(() => {
     fetchLikes();
-  }, []);
+  }, [userLike]);
   return (
     <ScrollView>
       <Card>
